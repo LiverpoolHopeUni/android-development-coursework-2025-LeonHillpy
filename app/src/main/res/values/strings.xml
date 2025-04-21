@@ -9,4 +9,5 @@
     <string name="type_your_note_here">Type your note here…</string>
     <string name="save_note">Save Note</string>
     <string name="homepage_text">View saved notes below. Use the [+] to create a new note.</string>
+    <string name="Notes_text">Notes go here</string>
 </resources>
