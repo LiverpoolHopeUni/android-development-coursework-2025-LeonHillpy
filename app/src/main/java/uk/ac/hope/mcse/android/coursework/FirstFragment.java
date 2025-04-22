@@ -39,7 +39,13 @@ public class FirstFragment extends Fragment {
 
         // Observe the note LiveData and update the TextView when the note changes
         // Update the TextView with the new note
-        viewModel.getNote().observe(getViewLifecycleOwner(), notesText::setText);
+        viewModel.getNotes().observe(getViewLifecycleOwner(), notes -> {
+            StringBuilder allNotes = new StringBuilder();
+            for (String note : notes) {
+                allNotes.append("• ").append(note).append("\n\n");
+            }
+            notesText.setText(allNotes.toString().trim());
+        });
     }
 
     @Override

@@ -4,14 +4,22 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NoteViewModel extends ViewModel {
-    private final MutableLiveData<String> note = new MutableLiveData<>();
+import java.util.ArrayList;
+import java.util.List;
 
-    public void setNote(String newNote) {
-        note.setValue(newNote);
+public class NoteViewModel extends ViewModel {
+
+    private final MutableLiveData<List<String>> notes = new MutableLiveData<>(new ArrayList<>());
+
+    public LiveData<List<String>> getNotes() {
+        return notes;
     }
 
-    public LiveData<String> getNote() {
-        return note;
+    public void addNote(String note) {
+        List<String> currentNotes = notes.getValue();
+        if (currentNotes != null) {
+            currentNotes.add(note);
+            notes.setValue(currentNotes);
+        }
     }
 }

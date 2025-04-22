@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -23,37 +24,29 @@ public class SecondFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
         binding = FragmentSecondBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
-    }
-
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Get reference to the ViewModel
-        NoteViewModel viewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
-
-        // Get your EditText and Button
-        EditText noteInput = view.findViewById(R.id.noteInput);
-        Button saveButton = view.findViewById(R.id.button_second); // or your custom save button
-
-        // When the button is clicked, save the note and go back
-        saveButton.setOnClickListener(v -> {
-            String note = noteInput.getText().toString();
-            viewModel.setNote(note);  // Save to ViewModel
-
-            // Navigate back to FirstFragment
-            NavController navController = NavHostFragment.findNavController(this);
-            navController.navigate(R.id.action_SecondFragment_to_FirstFragment);
-        });
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        // Get the ViewModel
+        NoteViewModel viewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
+
+        // Get the EditText where the user enters the note
+        EditText noteInput = view.findViewById(R.id.noteInput);
+
+        // When the user clicks the save button
+        binding.buttonSecond.setOnClickListener(v -> {
+            String note = noteInput.getText().toString().trim();
+
+            if (!note.isEmpty()) {
+                // Add the note to the ViewModel (list of notes)
+                viewModel.addNote(note);
+                noteInput.setText(""); // Clear the input field
+            }
+        });
+    }
 }

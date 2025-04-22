@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">CourseworkApp</string>
+    <string name="app_name">Notes App</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">Notes App by Leon Hill</string>
+    <string name="first_fragment_label">Simple Notes App by Leon Hill</string>
     <string name="second_fragment_label">Add Note</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
