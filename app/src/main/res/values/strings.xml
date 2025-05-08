@@ -2,12 +2,13 @@
     <string name="app_name">Notes App</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">Simple Notes App by Leon Hill</string>
+    <string name="first_fragment_label">Notes App</string>
     <string name="second_fragment_label">Add Note</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="type_your_note_here">Type your note here…</string>
     <string name="save_note">Save Note</string>
-    <string name="homepage_text">View saved notes below. Use the [+] to create a new note.</string>
+    <string name="homepage_text">Use the [+] to create a new note.</string>
     <string name="Notes_text">Notes go here</string>
+    <string name="delete_button_text">Delete</string>
 </resources>

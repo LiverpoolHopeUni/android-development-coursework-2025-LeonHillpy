@@ -19,7 +19,15 @@ public class NoteViewModel extends ViewModel {
         List<String> currentNotes = notes.getValue();
         if (currentNotes != null) {
             currentNotes.add(note);
-            notes.setValue(currentNotes);
+            notes.setValue(new ArrayList<>(currentNotes)); // trigger LiveData update
+        }
+    }
+
+    public void removeNote(String note) {
+        List<String> currentNotes = notes.getValue();
+        if (currentNotes != null) {
+            currentNotes.remove(note);
+            notes.setValue(new ArrayList<>(currentNotes)); // trigger LiveData update
         }
     }
 }

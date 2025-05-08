@@ -1,18 +1,20 @@
 package uk.ac.hope.mcse.android.coursework;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import uk.ac.hope.mcse.android.coursework.databinding.FragmentFirstBinding;
-import uk.ac.hope.mcse.android.coursework.NoteViewModel;
 
 public class FirstFragment extends Fragment {
 
@@ -34,17 +36,50 @@ public class FirstFragment extends Fragment {
         // Get reference to the ViewModel
         NoteViewModel viewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
 
-        // Get reference to the TextView that will display the saved note
-        TextView notesText = view.findViewById(R.id.Notes_text);
+        // Get the container layout where we will add note blocks
+        LinearLayout notesContainer = view.findViewById(R.id.notes_container);
 
-        // Observe the note LiveData and update the TextView when the note changes
-        // Update the TextView with the new note
-        viewModel.getNotes().observe(getViewLifecycleOwner(), notes -> {
-            StringBuilder allNotes = new StringBuilder();
-            for (String note : notes) {
-                allNotes.append("• ").append(note).append("\n\n");
+        // Observe the notes LiveData
+        viewModel.getNotes().observe(getViewLifecycleOwner(), noteList -> {
+            // Clear previous views
+            notesContainer.removeAllViews();
+
+            // Add each note as a block with a delete button
+            for (String note : noteList) {
+                // Create a horizontal layout for the note + delete button
+                LinearLayout noteRow = new LinearLayout(requireContext());
+                noteRow.setOrientation(LinearLayout.HORIZONTAL);
+                noteRow.setPadding(8, 8, 8, 8);
+                noteRow.setBackgroundResource(R.drawable.note_background);
+
+                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                rowParams.setMargins(0, 0, 0, 24);
+                noteRow.setLayoutParams(rowParams);
+
+                // Create the note TextView
+                TextView noteText = new TextView(requireContext());
+                noteText.setText(note);
+                noteText.setTextSize(16);
+                noteText.setTextColor(Color.WHITE);
+                noteText.setLayoutParams(new LinearLayout.LayoutParams(
+                        0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
+                ));
+
+                // Create the delete button
+                Button deleteButton = new Button(requireContext());
+                deleteButton.setText(getString(R.string.delete_button_text));
+                deleteButton.setOnClickListener(v -> viewModel.removeNote(note));
+
+                // Add TextView and Button to the row
+                noteRow.addView(noteText);
+                noteRow.addView(deleteButton);
+
+                // Add the row to the container
+                notesContainer.addView(noteRow);
             }
-            notesText.setText(allNotes.toString().trim());
         });
     }
 
