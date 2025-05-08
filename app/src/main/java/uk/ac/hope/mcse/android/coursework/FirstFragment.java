@@ -2,12 +2,15 @@ package uk.ac.hope.mcse.android.coursework;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,52 +36,67 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Get reference to the ViewModel
         NoteViewModel viewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
-
-        // Get the container layout where we will add note blocks
         LinearLayout notesContainer = view.findViewById(R.id.notes_container);
 
-        // Observe the notes LiveData
         viewModel.getNotes().observe(getViewLifecycleOwner(), noteList -> {
-            // Clear previous views
             notesContainer.removeAllViews();
 
-            // Add each note as a block with a delete button
             for (String note : noteList) {
-                // Create a horizontal layout for the note + delete button
-                LinearLayout noteRow = new LinearLayout(requireContext());
-                noteRow.setOrientation(LinearLayout.HORIZONTAL);
-                noteRow.setPadding(8, 8, 8, 8);
-                noteRow.setBackgroundResource(R.drawable.note_background);
 
-                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                // Outer vertical block
+                LinearLayout noteBlock = new LinearLayout(requireContext());
+                noteBlock.setOrientation(LinearLayout.VERTICAL);
+                noteBlock.setPadding(24, 24, 24, 24);
+                noteBlock.setBackgroundResource(R.drawable.note_background);
+
+                LinearLayout.LayoutParams blockParams = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 );
-                rowParams.setMargins(0, 0, 0, 24);
-                noteRow.setLayoutParams(rowParams);
+                blockParams.setMargins(0, 0, 0, 32);
+                noteBlock.setLayoutParams(blockParams);
 
-                // Create the note TextView
+                // Note Text
                 TextView noteText = new TextView(requireContext());
                 noteText.setText(note);
                 noteText.setTextSize(16);
-                noteText.setTextColor(Color.WHITE);
+                noteText.setTextColor(Color.BLACK);
                 noteText.setLayoutParams(new LinearLayout.LayoutParams(
-                        0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
 
-                // Create the delete button
-                Button deleteButton = new Button(requireContext());
-                deleteButton.setText(getString(R.string.delete_button_text));
+                // Delete Button
+                ImageButton deleteButton = new ImageButton(requireContext());
+                deleteButton.setImageResource(R.drawable.ic_delete); // bin icon
+                deleteButton.setBackgroundResource(R.drawable.red_rounded_button); // red rounded background
+                deleteButton.setColorFilter(Color.WHITE); // make icon white
+                deleteButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                // Reduce padding so icon appears larger inside button
+                int paddingInDp = (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
+                deleteButton.setPadding(paddingInDp, paddingInDp, paddingInDp, paddingInDp);
+
+                // Set fixed dp size for button
+                int sizeInDp = (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics());
+                LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
+                        sizeInDp, sizeInDp
+                );
+                btnParams.gravity = Gravity.END;
+                btnParams.topMargin = 16;
+                deleteButton.setLayoutParams(btnParams);
+
                 deleteButton.setOnClickListener(v -> viewModel.removeNote(note));
 
-                // Add TextView and Button to the row
-                noteRow.addView(noteText);
-                noteRow.addView(deleteButton);
+                // Add views to block
+                noteBlock.addView(noteText);
+                noteBlock.addView(deleteButton);
 
-                // Add the row to the container
-                notesContainer.addView(noteRow);
+                // Add block to container
+                notesContainer.addView(noteBlock);
             }
         });
     }
