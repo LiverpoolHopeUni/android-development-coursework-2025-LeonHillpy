@@ -11,4 +11,5 @@
     <string name="homepage_text">Use the [+] to create a new note.</string>
     <string name="Notes_text">Notes go here</string>
     <string name="delete_button_text">Delete</string>
+    <string name="todo">TODO</string>
 </resources>

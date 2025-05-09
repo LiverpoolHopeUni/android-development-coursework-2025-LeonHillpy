@@ -1,0 +1,5 @@
+<resources>
+    <color name="colorPrimary">#BB86FC</color> <!-- Dark mode primary color -->
+    <color name="colorBackground">#121212</color> <!-- Dark background color -->
+    <color name="textColor">#FFFFFF</color> <!-- Light text on dark background -->
+</resources>

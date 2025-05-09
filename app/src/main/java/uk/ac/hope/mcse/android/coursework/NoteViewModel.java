@@ -30,4 +30,15 @@ public class NoteViewModel extends ViewModel {
             notes.setValue(new ArrayList<>(currentNotes)); // trigger LiveData update
         }
     }
+
+    public void updateNote(String oldNote, String newNote) {
+        List<String> currentNotes = notes.getValue();
+        if (currentNotes != null) {
+            int index = currentNotes.indexOf(oldNote);
+            if (index != -1) {
+                currentNotes.set(index, newNote);
+                notes.setValue(new ArrayList<>(currentNotes)); // trigger LiveData update
+            }
+        }
+    }
 }
